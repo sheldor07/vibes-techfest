@@ -16,6 +16,10 @@ const CreateImage = () => {
   const [sliderValue, setSliderValue] = useState(10);
   const [imagePreview, setImagePreview] = useState(defaultImage);
   const [loading, setLoading] = useState(false); // Loading state
+  const [isPrivate, setIsPrivate] = useState(false);
+  const handleToggle = () => {
+    setIsPrivate(!isPrivate);
+  };
 
   // Function to handle the change event of the slider
   const handleSliderChange = (bpm) => {
@@ -51,7 +55,7 @@ const CreateImage = () => {
 
     const payload = {
       token: localStorage.getItem("authToken"),
-      private: 0,
+      private: isPrivate ? 1 : 0,
       image: imagePreview,
       duration: sliderValue,
     };
@@ -117,19 +121,52 @@ const CreateImage = () => {
 
               <div className="mt-4"></div>
             </div>
-            <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-              2. Set your duration
-            </h3>
-            <div className="mt-4 inline-block w-72">
-              <Slider
-                onValueChange={handleSliderChange}
-                defaultValue={[10]}
-                max={30}
-                step={1}
-              />
-              <p className="text-sm mt-2 text-muted-foreground">
-                {sliderValue} seconds
-              </p>
+            <div className="mt-8 grid grid-cols-2">
+              <div>
+                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                  2. Set your duration
+                </h3>
+                <div className="mt-4 inline-block w-72">
+                  <Slider
+                    onValueChange={handleSliderChange}
+                    defaultValue={[10]}
+                    max={30}
+                    step={1}
+                  />
+                  <p className="text-sm mt-2 text-muted-foreground">
+                    {sliderValue} Seconds
+                  </p>
+                </div>
+              </div>{" "}
+              <div>
+                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                  3. Do you want to keep it private?
+                </h3>
+                <div className="flex items-center mt-2">
+                  <input
+                    id="privateToggle"
+                    type="checkbox"
+                    className="sr-only" // sr-only hides the actual checkbox but keeps it accessible
+                    checked={isPrivate}
+                    onChange={handleToggle}
+                  />
+                  <label
+                    htmlFor="privateToggle"
+                    className={`${
+                      isPrivate ? "bg-purple-700" : "bg-gray-300"
+                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out`}
+                  >
+                    <span
+                      className={`${
+                        isPrivate ? "translate-x-6" : "translate-x-1"
+                      } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-300 ease-in-out`}
+                    />
+                  </label>
+                  <span className="ml-3 text-sm font-medium text-gray-900">
+                    {isPrivate ? "Private" : "Public"}
+                  </span>
+                </div>
+              </div>
             </div>
 
             <Button

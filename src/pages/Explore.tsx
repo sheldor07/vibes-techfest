@@ -76,7 +76,7 @@ const Explore = () => {
           {Array(10)
             .fill(null)
             .map((_, idx) => (
-              <div className="flex items-center space-x-4">
+              <div key={idx} className="flex items-center space-x-4">
                 <div className="space-y-2">
                   <Skeleton className="h-8 w-[800px]" />
                 </div>

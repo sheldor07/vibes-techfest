@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import lockSvg from "./../assets/dashboard/lock.svg";
 import { useNavigate } from "react-router-dom";
 import { EC2_SERVER_URL } from "@/lib/backend-urls";
+import { Toggle } from "@/components/ui/toggle";
 const CreateText = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -23,6 +24,11 @@ const CreateText = () => {
   const [sliderValue, setSliderValue] = useState(10); // Default value
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isPrivate, setIsPrivate] = useState(false);
+  const handleToggle = () => {
+    console.log("isPrivate", isPrivate);
+    setIsPrivate(!isPrivate);
+  };
   const handleGenreClick = (genre) => {
     setSelectedGenre(genre);
   };
@@ -53,7 +59,7 @@ const CreateText = () => {
       token: localStorage.getItem("authToken"),
       prompt: description,
       genre: selectedGenre,
-      private: 0,
+      private: isPrivate ? 1 : 0,
       duration: sliderValue[0],
     };
 
@@ -182,22 +188,57 @@ const CreateText = () => {
                 </button>
               ))}
             </div>
-            <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-              2. Set your duration
-            </h3>
-            <div className="mt-4 inline-block w-72">
-              <Slider
-                onValueChange={handleSliderChange}
-                defaultValue={[10]}
-                max={30}
-                step={1}
-              />
-              <p className="text-sm mt-2 text-muted-foreground">
-                {sliderValue} Seconds
-              </p>
+
+            <div className="mt-8 grid grid-cols-2">
+              <div>
+                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                  2. Set your duration
+                </h3>
+                <div className="mt-4 inline-block w-72">
+                  <Slider
+                    onValueChange={handleSliderChange}
+                    defaultValue={[10]}
+                    max={30}
+                    step={1}
+                  />
+                  <p className="text-sm mt-2 text-muted-foreground">
+                    {sliderValue} Seconds
+                  </p>
+                </div>
+              </div>{" "}
+              <div>
+                <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+                  3. Do you want to keep it private?
+                </h3>
+                <div className="flex items-center mt-2">
+                  <input
+                    id="privateToggle"
+                    type="checkbox"
+                    className="sr-only" // sr-only hides the actual checkbox but keeps it accessible
+                    checked={isPrivate}
+                    onChange={handleToggle}
+                  />
+                  <label
+                    htmlFor="privateToggle"
+                    className={`${
+                      isPrivate ? "bg-purple-700" : "bg-gray-300"
+                    } relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out`}
+                  >
+                    <span
+                      className={`${
+                        isPrivate ? "translate-x-6" : "translate-x-1"
+                      } inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-300 ease-in-out`}
+                    />
+                  </label>
+                  <span className="ml-3 text-sm font-medium text-gray-900">
+                    {isPrivate ? "Private" : "Public"}
+                  </span>
+                </div>
+              </div>
             </div>
+
             <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-              3. Descibe your background music
+              4. Descibe your background music
             </h3>
             <textarea
               className="mt-4 w-full h-24 p-4 border-2 rounded-md"

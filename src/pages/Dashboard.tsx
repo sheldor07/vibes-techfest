@@ -99,15 +99,17 @@ const Dashboard = () => {
                 Inspire
               </Link>
             </SideBarButton>
-            <SideBarButton
-              variant="ghost"
-              onClick={() => navigate("/dashboard/library")}
-            >
-              <Link to="/dashboard/library" className="flex">
-                <img src={librarySvg} alt="library" className="w-5 mr-2" />
-                Library
-              </Link>
-            </SideBarButton>
+            {isLoggedIn && (
+              <SideBarButton
+                variant="ghost"
+                onClick={() => navigate("/dashboard/library")}
+              >
+                <Link to="/dashboard/library" className="flex">
+                  <img src={librarySvg} alt="library" className="w-5 mr-2" />
+                  Library
+                </Link>
+              </SideBarButton>
+            )}
           </div>
         </div>{" "}
         <DropdownMenu>

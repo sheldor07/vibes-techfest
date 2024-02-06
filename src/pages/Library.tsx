@@ -1,48 +1,49 @@
-import Player from "@/components/player";
-import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 import downloadSvg from "./../assets/dashboard/download.svg";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PROXY_SERVER_URL } from "@/lib/backend-urls";
 const Library = () => {
   const context = useOutletContext() as any; // Cast the context to 'any'
   const { setCurrentSong, currentSong } = context; // Now you can destructure without TypeScript errors
+  const [isLoading, setIsLoading] = useState(true);
   const generateFilename = (title) => {
     return title.toLowerCase().replace(/\s+/g, "-") + ".wav";
   };
-  const songData = [
-    {
-      id: 1,
-      title: "Moonlight Sonata",
-      artist: "Ludwig van Beethoven",
-      genre: "Classical",
-      duration: "5:32",
-      url: " https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
-    },
-    {
-      id: 2,
-      title: "Bohemian Rhapsody",
-      artist: "Queen",
-      genre: "Rock",
-      duration: "5:55",
-      url: "https://techfest-mp3.s3.amazonaws.com/AKIAQJOTY2BOENJZM2VT?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQJOTY2BOENJZM2VT%2F20240205%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20240205T214533Z&X-Amz-Expires=36000&X-Amz-SignedHeaders=host&X-Amz-Signature=5de34805fcc0ba658b2891ad913afd44232588226cb8e3b2690e19cbc6553e2b",
-    },
-    {
-      id: 3,
-      title: "Smells Like Teen Spirit",
-      artist: "Nirvana",
-      genre: "Grunge",
-      duration: "4:39",
-      url: "https://www.example.com/smells-like-teen-spirit",
-    },
-    {
-      id: 4,
-      title: "Shallow",
-      artist: "Lady Gaga, Bradley Cooper",
-      genre: "Pop",
-      duration: "3:35",
-      url: "https://www.example.com/shallow",
-    },
-  ];
+  const [songData, setSongData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const payload = {
+        token: localStorage.getItem("authToken"),
+      };
+      const response = await fetch(
+        `${PROXY_SERVER_URL}/techfest-private-library`,
+        {
+          method: "POST",
+          headers: {
+            "x-api-key": "nnLMkw79ne4xidb1Mp3nzaq8BsbYAhht5YwVrSR7",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
+      console.log("data", data);
+
+      if (!response.ok) {
+        console.log("error in fetching data");
+        return;
+      } else {
+        setSongData(data);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (songData.length > 0) {
+      setIsLoading(false);
+    }
+  }, [songData]);
   const handleSongSelect = (url) => {
     setCurrentSong(url);
     console.log("currentSong", currentSong);
@@ -58,7 +59,19 @@ const Library = () => {
         These are the AI-generated tunes that you have created <br></br> and
         saved. You can listen to them anytime, anywhere.
       </p>
-      {
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-1 mt-12">
+          {Array(10)
+            .fill(null)
+            .map((_, idx) => (
+              <div key={idx} className="flex items-center space-x-4">
+                <div className="space-y-2">
+                  <Skeleton className="h-8 w-[800px]" />
+                </div>
+              </div>
+            ))}
+        </div>
+      ) : (
         <div className="grid grid-cols-1 gap-1 mt-12">
           {songData.map((song) => (
             <div
@@ -68,9 +81,10 @@ const Library = () => {
                   ? " bg-purple-200"
                   : "border-transparent"
               }  hover:bg-neutral-200  duration-500 items-center justify-between`}
+              onClick={() => handleSongSelect(song.url)}
             >
-              <div onClick={() => handleSongSelect(song.url)}>
-                <h2 className="text-md font-semibold">{song.title}</h2>
+              <div>
+                <h2 className="text-md font-semibold">{song.name}</h2>
                 <p className="text-sm text-muted-foreground">{song.genre}</p>
               </div>
               <div className="flex items-center">
@@ -79,7 +93,7 @@ const Library = () => {
                 </p>
                 <a
                   href={song.url}
-                  download={generateFilename(song.title)}
+                  download={generateFilename(song.name)}
                   className=" text-white font-bold py-1 px-2 rounded inline-flex items-center"
                 >
                   <img src={downloadSvg} className="w-5" />
@@ -88,7 +102,7 @@ const Library = () => {
             </div>
           ))}
         </div>
-      }{" "}
+      )}
     </div>
   );
 };
