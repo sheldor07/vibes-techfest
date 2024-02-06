@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 import lockSvg from "./../assets/dashboard/lock.svg";
 import { useNavigate } from "react-router-dom";
+import { EC2_SERVER_URL } from "@/lib/backend-urls";
 const CreateText = () => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,7 +18,7 @@ const CreateText = () => {
   }, []);
   const context = useOutletContext() as any; // Cast the context to 'any'
 
-  const {  setCurrentSong, currentSong } = context; // Now you can destructure without TypeScript errors
+  const { setCurrentSong, currentSong } = context; // Now you can destructure without TypeScript errors
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [sliderValue, setSliderValue] = useState(10); // Default value
   const [description, setDescription] = useState("");
@@ -213,16 +214,16 @@ const CreateText = () => {
           <div className="flex h-screen w-[1200px] flex-col items-center justify-center bg-white rounded-lg">
             <img src={lockSvg} alt="lock" className="w-20 mb-4" />
             <h2 className="mb-4 text-2xl font-semibold text-gray-800">
-              Vibes are best if you're logged in
+              Vibes are best if you're part of it
             </h2>
             <p className="mb-8 text-md text-gray-600">
-              Please login to access this page.
+              You need an account to access this page.
             </p>
             <Button
               className="bg-purple-700 text-white font-bold py-2 px-4 rounded hover:bg-purple-800"
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/signup")}
             >
-              Login
+              Signup
             </Button>
           </div>
         </div>

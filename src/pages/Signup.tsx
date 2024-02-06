@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import toast, { Toaster } from "react-hot-toast";
 import { PROXY_SERVER_URL } from "@/lib/backend-urls";
+import { Link } from "react-router-dom";
 // Define the form schema using Zod
 const formSchema = z.object({
   email: z.string().email({
@@ -122,7 +123,14 @@ const Signup = () => {
             </Button>
           </form>
         </Form>
+        <p className="text-md text-center text-muted-foreground mt-4">
+          Already have an account?{" "}
+          <Link to={"/login"} className="text-sm underline text-purple-700">
+            Login
+          </Link>
+        </p>
       </div>
+
       <Toaster />
     </div>
   );

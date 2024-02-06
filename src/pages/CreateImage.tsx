@@ -136,18 +136,19 @@ const CreateImage = () => {
         </>
       ) : (
         <div className="flex h-screen w-[1200px] flex-col items-center justify-center bg-white rounded-lg">
-          <img src={lockSvg} alt="lock" className="w-20 mb-4" />
-          <h2 className="mb-4 text-2xl font-semibold text-gray-800">
-            Vibes are best if you're logged in
+          <img src={lockSvg} alt="lock" className="w-20 mb-8" />
+          <h2 className="mb-2 text-2xl font-semibold text-gray-800">
+            Vibes are best if you're part of it
           </h2>
-          <p className="mb-8 text-md text-gray-600">
-            Please login to access this page.
+          <p className="mb-4 text-md text-muted-foreground">
+            You need an account to access this page.
           </p>
           <Button
-            className="bg-purple-700 text-white font-bold py-2 px-4 rounded hover:bg-purple-800"
-            onClick={() => navigate("/login")}
+            variant="default"
+            className="bg-purple-700 text-white font-bold py-2 px-4 rounded hover:bg-purple-800 "
+            onClick={() => navigate("/signup")}
           >
-            Login
+            Signup
           </Button>
         </div>
       )}

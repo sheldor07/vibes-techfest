@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PROXY_SERVER_URL } from "@/lib/backend-urls";
 // Define the form schema using Zod
 const formSchema = z.object({
@@ -121,6 +121,12 @@ const Login = () => {
             </Button>
           </form>
         </Form>
+        <p className="text-sm text-center text-muted-foreground mt-4">
+          Don't have an account?{" "}
+          <Link to={"/signup"} className="text-sm underline text-purple-700">
+            Signup
+          </Link>
+        </p>
       </div>
       <Toaster />
     </div>
