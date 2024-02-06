@@ -1,66 +1,89 @@
-import Player from "@/components/player";
-import { Card } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
 import downloadSvg from "./../assets/dashboard/download.svg";
+import { PROXY_SERVER_URL } from "@/lib/backend-urls";
+import { Skeleton } from "@/components/ui/skeleton"; // Import the Skeleton component
+
 const Explore = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const context = useOutletContext() as any; // Cast the context to 'any'
 
-  const {  setCurrentSong, currentSong } = context; // Now you can destructure without TypeScript errors
+  const { setCurrentSong, currentSong } = context; // Now you can destructure without TypeScript errors
+  const [songData, setSongData] = useState([]);
 
-  const songData = [
-    {
-      id: 1,
-      title: "Moonlight Sonata",
-      artist: "Ludwig van Beethoven",
-      genre: "Classical",
-      duration: "5:32",
-      url: "https://techfest-mp3.s3.amazonaws.com/AKIAQJOTY2BOENJZM2VT?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQJOTY2BOENJZM2VT%2F20240205%2Fap-south-1%2Fs3%2Faws4_request&X-Amz-Date=20240205T214533Z&X-Amz-Expires=36000&X-Amz-SignedHeaders=host&X-Amz-Signature=5de34805fcc0ba658b2891ad913afd44232588226cb8e3b2690e19cbc6553e2b",
-    },
-    {
-      id: 2,
-      title: "Bohemian Rhapsody",
-      artist: "Queen",
-      genre: "Rock",
-      duration: "5:55",
-      url: "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
-    },
-    {
-      id: 3,
-      title: "Smells Like Teen Spirit",
-      artist: "Nirvana",
-      genre: "Grunge",
-      duration: "4:39",
-      url: "https://www.example.com/smells-like-teen-spirit",
-    },
-    {
-      id: 4,
-      title: "Shallow",
-      artist: "Lady Gaga, Bradley Cooper",
-      genre: "Pop",
-      duration: "3:35",
-      url: "https://www.example.com/shallow",
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(
+        `${PROXY_SERVER_URL}/techfest-public-library`,
+        {
+          method: "GET",
+          headers: {
+            "x-api-key": "nnLMkw79ne4xidb1Mp3nzaq8BsbYAhht5YwVrSR7",
+          },
+        }
+      );
+      const data = await response.json();
+      console.log("data", data);
+
+      if (!response.ok) {
+        console.log("error in fetching data");
+        return;
+      } else {
+        setSongData(data);
+      }
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    if (songData.length > 0) {
+      setIsLoading(false);
+    }
+  }, [songData]);
+
   const handleSongSelect = (url) => {
     setCurrentSong(url);
     console.log("currentSong", currentSong);
   };
-  const generateFilename = (title) => {
-    return title.toLowerCase().replace(/\s+/g, "-") + ".wav";
+  const generateFilename = (name) => {
+    return name.toLowerCase().replace(/\s+/g, "-") + ".wav";
   };
+
+  // Skeleton Loader for each song item
+  const songSkeleton = (
+    <div className="flex flex-row p-2 w-[800px] rounded-md border-transparent items-center justify-between">
+      <div>
+        <Skeleton className="h-4 w-[200px]" />
+        <Skeleton className="h-4 w-[150px]" />
+      </div>
+      <div className="flex items-center">
+        <Skeleton className="h-4 w-16 mr-4" />
+        <Skeleton className="h-8 w-8" />
+      </div>
+    </div>
+  );
 
   return (
     <div>
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         Explore
-      </h1>{" "}
+      </h1>
       <p className="text-md mt-2 text-muted-foreground">
-        {" "}
         Explore and get inspired by the innovative universe <br></br> of
         AI-generated tunes crafted by brilliant minds around the globe.
       </p>
-      {
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-1 mt-12">
+          {Array(10)
+            .fill(null)
+            .map((_, idx) => (
+              <div className="flex items-center space-x-4">
+                <div className="space-y-2">
+                  <Skeleton className="h-8 w-[800px]" />
+                </div>
+              </div>
+            ))}
+        </div>
+      ) : (
         <div className="grid grid-cols-1 gap-1 mt-12">
           {songData.map((song) => (
             <div
@@ -72,7 +95,7 @@ const Explore = () => {
               }  hover:bg-neutral-200  duration-500 items-center justify-between`}
             >
               <div onClick={() => handleSongSelect(song.url)}>
-                <h2 className="text-md font-semibold">{song.title}</h2>
+                <h2 className="text-md font-semibold">{song.name}</h2>
                 <p className="text-sm text-muted-foreground">{song.genre}</p>
               </div>
               <div className="flex items-center">
@@ -81,7 +104,7 @@ const Explore = () => {
                 </p>
                 <a
                   href={song.url}
-                  download={generateFilename(song.title)}
+                  download={generateFilename(song.name)}
                   className=" text-white font-bold py-1 px-2 rounded inline-flex items-center"
                 >
                   <img src={downloadSvg} className="w-5" />
@@ -90,8 +113,9 @@ const Explore = () => {
             </div>
           ))}
         </div>
-      }{" "}
+      )}
     </div>
   );
 };
+
 export default Explore;
