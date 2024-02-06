@@ -1,7 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -16,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import toast, { Toaster } from "react-hot-toast";
+import { PROXY_SERVER_URL } from "@/lib/backend-urls";
 // Define the form schema using Zod
 const formSchema = z.object({
   email: z.string().email({
@@ -45,24 +45,8 @@ const Signup = () => {
 
   // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    // const response = await fetch(
-    //   "https://1agnfox1re.execute-api.ap-south-1.amazonaws.com/Production/techfest-audio-namer",
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "x-api-key": "nnLMkw79ne4xidb1Mp3nzaq8BsbYAhht5YwVrSR7",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body:{
-    //         "prompt": "A happy tune",
-    //     }
-    //   }
-    // );
-
-    // console.log(values);
-    // // Handle form submission here
     // // send a request to teh server
-    const response = await fetch("http://localhost:3001/techfest_signup", {
+    const response = await fetch(`${PROXY_SERVER_URL}/techfest_signup`, {
       method: "POST",
       headers: {
         "x-api-key": "2RttSEJUCC4f3s9K4FO8A2LQhcxzcyZy8ENOzYEV",

@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { SideBarButton } from "@/components/ui/sidebar-button";
-import Player from "./../components/player";
+import Player from "../components/player";
 
 import createSvg from "./../assets/dashboard/create.svg";
 import exploreSvg from "./../assets/dashboard/explore.svg";
@@ -25,6 +25,7 @@ import librarySvg from "./../assets/dashboard/library.svg";
 import imageSvg from "./../assets/dashboard/image.svg";
 import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { PROXY_SERVER_URL } from "@/lib/backend-urls";
 const Dashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
@@ -39,7 +40,7 @@ const Dashboard = () => {
       token: localStorage.getItem("authToken"),
     };
 
-    const response = await fetch("http://localhost:3001/techfest-signout", {
+    const response = await fetch(`${PROXY_SERVER_URL}/techfest-signout`, {
       method: "POST",
       headers: {
         "x-api-key": "SUsY4RKu6h4AGCiYA2BLs9YHxxThZyQv6YawpI6l",
@@ -81,11 +82,7 @@ const Dashboard = () => {
               onClick={() => navigate("/dashboard/create-text")}
             >
               <Link to="/dashboard/create-text" className="flex w-full">
-                <img
-                  src={createSvg}
-                  alt="create"
-                  className="w-5 mr-2"
-                />
+                <img src={createSvg} alt="create" className="w-5 mr-2" />
                 Create
               </Link>
             </SideBarButton>
@@ -94,11 +91,7 @@ const Dashboard = () => {
               onClick={() => navigate("/dashboard/create-image")}
             >
               <Link to="/dashboard/create-image" className="flex">
-                <img
-                  src={imageSvg}
-                  alt="create"
-                  className="w-5 mr-2"
-                />
+                <img src={imageSvg} alt="create" className="w-5 mr-2" />
                 Inspire
               </Link>
             </SideBarButton>
@@ -107,11 +100,7 @@ const Dashboard = () => {
               onClick={() => navigate("/dashboard/library")}
             >
               <Link to="/dashboard/library" className="flex">
-                <img
-                  src={librarySvg}
-                  alt="library"
-                  className="w-5 mr-2"
-                />
+                <img src={librarySvg} alt="library" className="w-5 mr-2" />
                 Library
               </Link>
             </SideBarButton>

@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { PROXY_SERVER_URL } from "@/lib/backend-urls";
 // Define the form schema using Zod
 const formSchema = z.object({
   email: z.string().email({
@@ -45,7 +46,7 @@ const Login = () => {
   // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    const response = await fetch("http://localhost:3001/techfest_sign_in", {
+    const response = await fetch(`${PROXY_SERVER_URL}/techfest_sign_in`, {
       method: "POST",
       headers: {
         "x-api-key": "2RttSEJUCC4f3s9K4FO8A2LQhcxzcyZy8ENOzYEV",
