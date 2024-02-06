@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Input } from "@/components/ui/input";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import defaultImage from "./../assets/dashboard/default-image.png";
 import toast from "react-hot-toast"; // Import toast for showing messages
 import Loader from "@/components/ui/loader";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import lockSvg from "./../assets/dashboard/lock.svg";
+import { EC2_SERVER_URL } from "@/lib/backend-urls";
 const CreateImage = () => {
   const context = useOutletContext() as any; // Cast the context to 'any'
 
@@ -38,7 +38,7 @@ const CreateImage = () => {
       setImagePreview(null);
     }
   };
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!imagePreview || imagePreview === defaultImage) {
       toast.error("Please upload an image");
       return;
@@ -62,14 +62,21 @@ const CreateImage = () => {
     );
 
     setLoading(true);
-    setTimeout(() => {
+    const response = await fetch(`${EC2_SERVER_URL}/image/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (response.ok) {
+      toast.success("Tune generated successfully!");
+      setCurrentSong(response.url);
       setLoading(false);
-      // Simulate setting a song after generation, you might want to change this to a real function call
-      console.log("Tune generated successfully!");
-      setCurrentSong(
-        "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
-      );
-    }, 3000);
+    } else {
+      toast.error("Failed to generate tune");
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

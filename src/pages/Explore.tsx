@@ -93,8 +93,9 @@ const Explore = () => {
                   ? " bg-purple-200"
                   : "border-transparent"
               }  hover:bg-neutral-200  duration-500 items-center justify-between`}
+              onClick={() => handleSongSelect(song.url)}
             >
-              <div onClick={() => handleSongSelect(song.url)}>
+              <div>
                 <h2 className="text-md font-semibold">{song.name}</h2>
                 <p className="text-sm text-muted-foreground">{song.genre}</p>
               </div>

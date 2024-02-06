@@ -27,13 +27,14 @@ import { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { PROXY_SERVER_URL } from "@/lib/backend-urls";
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     if (localStorage.getItem("authToken")) {
       setIsLoggedIn(true);
     }
   }, []);
-  const navigate = useNavigate();
   const [currentSong, setCurrentSong] = useState(null);
   const handleLogout = async () => {
     const payload = {
@@ -56,6 +57,9 @@ const Dashboard = () => {
       console.log("error in logging out");
     }
   };
+  useEffect(() => {
+    navigate("/dashboard/explore");
+  }, []);
   return (
     <div className="flex flex-row pb-24">
       <nav className="flex flex-col items-left justify-between px-4 py-12 mr-10 border-r-2 relative left-0 top-0 h-screen">

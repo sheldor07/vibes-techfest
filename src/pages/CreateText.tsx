@@ -35,7 +35,7 @@ const CreateText = () => {
     setDescription(event.target.value);
   };
   // Handle the generation process
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (!selectedGenre) {
       toast.error("Please select a genre");
       return;
@@ -63,12 +63,21 @@ const CreateText = () => {
       JSON.stringify(payload)
     );
     setLoading(true);
-    setTimeout(() => {
+    const response = await fetch(`${EC2_SERVER_URL}/text`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (response.ok) {
+      toast.success("Tune generated successfully!");
+      setCurrentSong(response.url);
       setLoading(false);
-      setCurrentSong(
-        "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3"
-      );
-    }, 3000);
+    } else {
+      toast.error("Failed to generate tune");
+      setLoading(false);
+    }
 
     // You can send this data to a server or use it as needed
   };
@@ -196,10 +205,6 @@ const CreateText = () => {
               value={description}
               onChange={handleDescriptionChange}
             ></textarea>
-            <h3 className="mt-8 scroll-m-20 text-xl font-semibold tracking-tight">
-              3. Descibe your background music
-            </h3>
-
             <Button
               className="mt-8 bg-purple-700 flex items-center justify-center"
               variant="default"
