@@ -60,7 +60,8 @@ const Login = () => {
       localStorage.setItem("authToken", data.token);
       navigate("/dashboard/create-text"); // Redirect to dashboard route
     } else {
-      toast.error("Failed to create user");
+      const error = data["error"];
+      toast.error(JSON.stringify(error) || "Failed to create user") ;
       console.log("Failed to create user");
     }
   }

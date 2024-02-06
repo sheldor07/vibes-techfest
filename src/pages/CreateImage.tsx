@@ -13,7 +13,7 @@ const CreateImage = () => {
 
   const { isLoggedIn, setCurrentSong, currentSong } = context; // Now you can destructure without TypeScript errors
   const navigate = useNavigate();
-  const [sliderValue, setSliderValue] = useState(33);
+  const [sliderValue, setSliderValue] = useState(10);
   const [imagePreview, setImagePreview] = useState(defaultImage);
   const [loading, setLoading] = useState(false); // Loading state
 
@@ -116,8 +116,8 @@ const CreateImage = () => {
             <div className="mt-4 inline-block w-72">
               <Slider
                 onValueChange={handleSliderChange}
-                defaultValue={[33]}
-                max={100}
+                defaultValue={[10]}
+                max={30}
                 step={1}
               />
               <p className="text-sm mt-2 text-muted-foreground">
