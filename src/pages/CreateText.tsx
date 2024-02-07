@@ -69,7 +69,7 @@ const CreateText = () => {
       JSON.stringify(payload)
     );
     setLoading(true);
-    const response = await fetch(`${EC2_SERVER_URL}/text`, {
+    const response = await fetch(`${EC2_SERVER_URL}/text/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
