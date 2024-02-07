@@ -18,7 +18,7 @@ const Library = () => {
         token: localStorage.getItem("authToken"),
       };
       const response = await fetch(
-        `${PROXY_SERVER_URL}/techfest-private-library`,
+        `${PROXY_SERVER_URL}/techfest-public-library`,
         {
           method: "POST",
           headers: {
