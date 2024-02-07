@@ -53,20 +53,34 @@ const CreateImage = () => {
       return;
     }
 
+    // const payload = {
+    //   token: localStorage.getItem("authToken"),
+    //   private: isPrivate ? 1 : 0,
+    //   image: imagePreview,
+    //   duration: sliderValue,
+    // };
     const payload = {
       token: localStorage.getItem("authToken"),
+      prompt: "Tech style product demo",
+      genre: "Tech Newws",
       private: isPrivate ? 1 : 0,
-      image: imagePreview,
-      duration: sliderValue,
+      duration: sliderValue[0],
     };
-
     console.log(
       "Generating tune with the following data:",
       JSON.stringify(payload)
     );
 
     setLoading(true);
-    const response = await fetch(`${EC2_SERVER_URL}/image/`, {
+    // const response = await fetch(`${EC2_SERVER_URL}/image/`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(payload),
+    // });
+
+    const response = await fetch(`${EC2_SERVER_URL}/text/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
