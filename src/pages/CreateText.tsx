@@ -76,9 +76,10 @@ const CreateText = () => {
       },
       body: JSON.stringify(payload),
     });
+    const data = await response.json();
     if (response.ok) {
       toast.success("Tune generated successfully!");
-      setCurrentSong(response.url);
+      setCurrentSong(data.url);
       setLoading(false);
     } else {
       toast.error("Failed to generate tune");
