@@ -101,7 +101,7 @@ const Explore = () => {
               </div>
               <div className="flex items-center">
                 <p className="text-sm text-muted-foreground mr-4">
-                  {song.duration}
+                  0:{song.duration}
                 </p>
                 <a
                   href={song.url}
